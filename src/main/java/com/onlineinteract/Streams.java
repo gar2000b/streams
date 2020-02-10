@@ -6,8 +6,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -94,5 +93,42 @@ public class Streams {
                 .filter(x -> x.length == 3)
                 .count();
         System.out.println(rowCount + " rows.");
+        System.out.println();
+
+        // 11. Stream rows from csv file, parse data from rows.
+        Stream<String> rows2 = Files.lines(Paths.get(getClass().getResource("/data.txt").toURI()));
+        rows2
+                .map(x -> x.split(","))
+                .filter(x -> x.length == 3)
+                .filter(x -> Integer.parseInt(x[1]) > 15)
+                .forEach(x -> System.out.println(x[0] + " " + x[1] + " " + x[2]));
+        System.out.println();
+
+        // 12. Stream rows from CSV file, store fields in HashMap.
+        Stream<String> rows3 = Files.lines(Paths.get(getClass().getResource("/data.txt").toURI()));
+        Map<String, Integer> map = new HashMap<>();
+        map = rows3
+                .map(x -> x.split(","))
+                .filter(x -> x.length == 3)
+                .filter(x -> Integer.parseInt(x[1]) > 15)
+                .collect(Collectors.toMap(
+                        x -> x[0],
+                        x -> Integer.parseInt(x[1])));
+        rows3.close();
+        for (String key : map.keySet()) {
+            System.out.println(key + "  " + map.get(key));
+        }
+        System.out.println();
+
+        // 13. Reduction - sum.
+        double total = Stream.of(7.3, 1.5, 4.8)
+                .reduce(0.0, (Double a, Double b) -> a + b);
+        System.out.println("Total = " + total);
+        System.out.println();
+
+        // 14. Reduction - summary statistics.
+        IntSummaryStatistics summary = IntStream.of(7, 2, 19, 88, 73, 4, 10)
+                .summaryStatistics();
+        System.out.println(summary);
     }
 }
