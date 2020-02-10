@@ -11,6 +11,17 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+/**
+ * The Java Streams API contains a set of non-terminal operations:
+ * filter, map, flatMap, distinct, limit, peek
+ * <p>
+ * The Java Streams API contains a set of terminal operations:
+ * anyMatch/all Match/noneMatch, collect, count, findAny/findAll, forEach, min/max, reduce, toArray
+ * <p>
+ * It is possible to concatenate multiple streams into one stream.
+ * <p>
+ * It is possible to do parallel stream processing.
+ */
 public class Streams {
     public static void main(String[] args) throws IOException, URISyntaxException {
         new Streams().samples();
@@ -130,5 +141,34 @@ public class Streams {
         IntSummaryStatistics summary = IntStream.of(7, 2, 19, 88, 73, 4, 10)
                 .summaryStatistics();
         System.out.println(summary);
+
+        class Employee {
+            String salary;
+
+            public Employee(String salary) {
+                this.salary = salary;
+            }
+
+            public String getSalary() {
+                return salary;
+            }
+
+            public void setSalary(String salary) {
+                this.salary = salary;
+            }
+        }
+        System.out.println();
+
+        // 15. Reduction -> Employee Salary.
+        List<Employee> list = new ArrayList<>();
+        list.add(new Employee("5000"));
+        list.add(new Employee("6000"));
+        list.add(new Employee("4000"));
+
+        int sum = list.stream()
+                .map(employee -> employee.salary)
+                .map(Integer::parseInt)
+                .reduce(0, (tempSum, value) -> tempSum + value);
+        System.out.println("salary sum = " + sum);
     }
 }
