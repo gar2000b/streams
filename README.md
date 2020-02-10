@@ -1,1 +1,1 @@
-# streams
+# Java Streams API
