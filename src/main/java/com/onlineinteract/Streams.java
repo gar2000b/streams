@@ -127,7 +127,7 @@ public class Streams {
                         x -> Integer.parseInt(x[1])));
         rows3.close();
         for (String key : map.keySet()) {
-            System.out.println(key + "  " + map.get(key));
+            System.out.println("key: " + key + "  value: " + map.get(key));
         }
         System.out.println();
 
