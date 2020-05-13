@@ -3,6 +3,7 @@ package com.onlineinteract;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
@@ -74,16 +75,35 @@ public class Streams2 {
 		System.out.println("Sample 7 - given a list of people, create a map where their name is the key and "
 				+ "value is all the people with that name i.e a list:\n");
 		Map<String, List<Person>> personListMap = people.stream()
-		.collect(groupingBy(Person::getName));
+				.collect(groupingBy(Person::getName));
 		System.out.println(personListMap + "\n");
-		
+
 		System.out.println("Sample 8 - given a list of people, create a map where their name is the key and "
 				+ "value is a list of all the ages of the people with that name:\n");
 		Map<String, List<Integer>> personListMap2 = people.stream()
-		.collect(groupingBy(Person::getName,
-				mapping(Person::getAge, toList())));
+				.collect(groupingBy(Person::getName,
+						mapping(Person::getAge, toList())));
 		System.out.println(personListMap2 + "\n");
 
+		System.out.println("Sample 9 - sorted, distinct example:\n");
+		List<Integer> numbers2 = Arrays.asList(5, 8, 9, 4, 1, 6, 7, 2, 9, 10);
+		List<Integer> sortedDistinctList = numbers2.stream()
+				.sorted()
+				.distinct()
+				.collect(toList());
+		System.out.println(sortedDistinctList + "\n");
+
+		System.out.println("Sample 10 - given a number k, and a count n, find the total of double of n even "
+				+ "numbers starting with k, where sqrt of each number is > 20:\n");
+		int k = 1;
+		int n = 10;
+		int sum = Stream.iterate(k, e -> e + 1)
+				.filter(e -> e % 2 == 0)
+				.filter(e -> Math.sqrt(e) > 20)
+				.mapToInt(e -> e * 2)
+				.limit(n)
+				.sum();
+		System.out.println(sum + "\n");
 	}
 
 	private static List<Person> createPeople() {
