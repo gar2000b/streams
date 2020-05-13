@@ -6,6 +6,12 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.*;
 
+/**
+ * More stream examples as per: https://www.youtube.com/watch?v=1OpAgZvYXLQ
+ * 
+ * @author garblac
+ *
+ */
 public class Streams2 {
 	public static void main(String[] args) {
 		new Streams2().samples();
@@ -55,7 +61,7 @@ public class Streams2 {
 				.filter(e -> e % 2 == 0)
 				.map(e -> e * 2)
 				.collect(toList());
-		System.out.println("\n" + doubleOfEven + "\n");
+		System.out.println(doubleOfEven + "\n");
 
 		System.out.println("Sample 6 -  create a map with name and age as key, and the person as value:\n");
 		List<Person> people = createPeople();
@@ -63,7 +69,21 @@ public class Streams2 {
 				.collect(toMap(
 						person -> person.getName() + person.getAge(),
 						person -> person));
-		System.out.println("\n" + personMap + "\n");
+		System.out.println(personMap + "\n");
+
+		System.out.println("Sample 7 - given a list of people, create a map where their name is the key and "
+				+ "value is all the people with that name i.e a list:\n");
+		Map<String, List<Person>> personListMap = people.stream()
+		.collect(groupingBy(Person::getName));
+		System.out.println(personListMap + "\n");
+		
+		System.out.println("Sample 8 - given a list of people, create a map where their name is the key and "
+				+ "value is a list of all the ages of the people with that name:\n");
+		Map<String, List<Integer>> personListMap2 = people.stream()
+		.collect(groupingBy(Person::getName,
+				mapping(Person::getAge, toList())));
+		System.out.println(personListMap2 + "\n");
+
 	}
 
 	private static List<Person> createPeople() {
