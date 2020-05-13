@@ -35,7 +35,7 @@ public class Streams {
 	public static void main(String[] args) throws IOException, URISyntaxException {
 		Streams streams = new Streams();
 		streams.samples1();
-//		streams.samples2();
+		streams.samples2();
 	}
 
 	public void samples1() {
@@ -109,7 +109,11 @@ public class Streams {
 		// 12. Stream rows from CSV file, store fields in HashMap.
 		Stream<String> rows3 = Files.lines(Paths.get(getClass().getResource("/data.txt").toURI()));
 		Map<String, Integer> map = new HashMap<>();
-		map = rows3.map(x -> x.split(",")).filter(x -> x.length == 3).filter(x -> Integer.parseInt(x[1]) > 15)
+		map = rows3
+				.peek(System.out::println)
+				.map(x -> x.split(","))
+				.filter(x -> x.length == 3)
+				.filter(x -> Integer.parseInt(x[1]) > 15)
 				.collect(Collectors.toMap(x -> x[0], x -> Integer.parseInt(x[1])));
 		rows3.close();
 		for (String key : map.keySet()) {
@@ -118,7 +122,8 @@ public class Streams {
 		System.out.println();
 
 		// 13. Reduction - sum.
-		double total = Stream.of(7.3, 1.5, 4.8).reduce(0.0, (Double a, Double b) -> a + b);
+		double total = Stream.of(7.3, 1.5, 4.8)
+				.reduce(0.0, (Double a, Double b) -> a + b);
 		System.out.println("Total = " + total);
 		System.out.println();
 
@@ -149,8 +154,12 @@ public class Streams {
 		list.add(new Employee("6000"));
 		list.add(new Employee("4000"));
 
-		int sum = list.stream().map(employee -> employee.salary).map(Integer::parseInt).reduce(0,
-				(tempSum, value) -> tempSum + value);
+		int sum = list.stream()
+				.map(employee -> employee.salary)
+//				.peek(System.out::println)
+				.map(Integer::parseInt)
+				.peek((in) -> System.out.println(in))
+				.reduce(0, (tempSum, value) -> tempSum + value);
 		System.out.println("salary sum = " + sum);
 	}
 }
